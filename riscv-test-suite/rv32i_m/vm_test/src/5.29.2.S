@@ -24,17 +24,17 @@ RVTEST_SIGBASE( x13,signature_x13_1)
   	
 main:
 #ifdef rvtest_mtrap_routine	// Verification of existance of rvtest_mtrap_routine
-	li a4, 0xceed
+	LI (a4, 0xceed)
 	RVTEST_SIGUPD(x13,a4)
 #endif
 #ifdef rvtest_strap_routine	// Verification of existance of rvtest_strap_routine
-	li a4, 0xbeed
+	LI (a4, 0xbeed)
 	RVTEST_SIGUPD(x13,a4)
 #endif
 	
-	li t2, -1		// WHOLE PHYSICAL MEMORY AS SINGLE REGION
+	LI (t2, -1)		// WHOLE PHYSICAL MEMORY AS SINGLE REGION
 	csrw pmpaddr0, t2
-	li t2, 0x0F		// TOR MODE WITH LOCK BIT ON; WIll write in terms of MACROS later
+	LI (t2, 0x0F)		// TOR MODE WITH LOCK BIT ON; WIll write in terms of MACROS later
 	csrw pmpcfg0, t2
 	// write satp with all zeros (bare mode)
 	csrw satp, x0
@@ -49,24 +49,24 @@ main:
 
 	// PTE setup for Instruction memory 0x91240000 -> 0x80000000
 
-	la a0, rvtest_slvl1_pg_tbl
+	LA (a0, rvtest_slvl1_pg_tbl)
 	// (PTE_D | PTE_A | PTE_G | PTE_U | PTE_X | PTE_W | PTE_R | PTE_V)
-    li a1, (PTE_V)   // permissions for PTE to for address instruction of instruction memory
+	LI (a1, (PTE_V))   // permissions for PTE to for address instruction of instruction memory
 	PTE_SETUP_RV32(a0, a1, t0, t1, va, 1)
 	
-	li a0, pa
-	#li a4, 0x1234
+	LI (a0, pa)
+	#LI (a4, 0x123)4
 
 
 	// (PTE_D | PTE_A | PTE_G | PTE_U | PTE_X | PTE_W | PTE_R | PTE_V)
-	li a1, (PTE_D | PTE_A | PTE_G | PTE_X | PTE_W | PTE_R | PTE_V)
+	LI (a1, (PTE_D | PTE_A | PTE_G | PTE_X | PTE_W | PTE_R | PTE_V))
 	PTE_SETUP_RV32(a0, a1, t0, t1, va, 0)
 
 	LA (a0, rvtest_data)
-	#li a4, 0x1234
+	#LI (a4, 0x123)4
 
 	// (PTE_D | PTE_A | PTE_G | PTE_U | PTE_X | PTE_W | PTE_R | PTE_V)
-	li a1, (PTE_D | PTE_A | PTE_G | PTE_X | PTE_W | PTE_R | PTE_V)  
+	LI (a1, (PTE_D | PTE_A | PTE_G | PTE_X | PTE_W | PTE_R | PTE_V))
 	PTE_SETUP_RV32(a0, a1, t0, t1, va_data, 0)
 
 
@@ -110,16 +110,16 @@ main:
 	
 
 vm_en:
-	la t1, 0x90011000
-	li t0, 0xdead1234
-	sw t0, 0(t1)
-	lw t0, 0(t1)
+	LA (t1, 0x90011000)
+	LI (t0, 0xdead1234)
+	SREG t0, 0(t1)
+	LREG t0, 0(t1)
 
 	RVTEST_GOTO_MMODE		// Switching back to M mode
-	li a4, 0x123
+	LI (a4, 0x123)
 	RVTEST_SIGUPD(x13,a4)
 mmode:
-	li t2, 0xabab			// Verification if handler is returning and SIGUPD is working afer the handler
+	LI (t2, 0xabab)			// Verification if handler is returning and SIGUPD is working afer the handler
 	csrw pmpaddr1, t2		// If in M-mode, this instruction will work otherwise not.
 	csrr a4, pmpaddr1
 	RVTEST_SIGUPD(x13,a4)
