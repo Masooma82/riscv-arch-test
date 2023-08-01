@@ -88,6 +88,7 @@ main:
 	add t1,sp,t0
 	csrw sscratch, t1 
 	
+	/******* code *******/
 	LREG t1, code_bgn_off+0*sv_area_sz(sp)
 	add t2, t1, t0
 	SREG t2, code_bgn_off+1*sv_area_sz(sp)
