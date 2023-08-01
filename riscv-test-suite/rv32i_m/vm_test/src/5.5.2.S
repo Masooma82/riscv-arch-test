@@ -111,7 +111,7 @@ main:
 	
 
 vm_en:
-	LA (t1, 0x90011000)
+	LA (t1, va_data)
 	LI (t0, 0xdead1234)
 	SREG t0, 0(t1)
 

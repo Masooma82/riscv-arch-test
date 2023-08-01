@@ -110,7 +110,7 @@ main:
 	
 
 vm_en:
-	LA (t1, 0x90011000)
+	LA (t1, va_data)
 	LREG t0, 0(t1)
 
 	RVTEST_GOTO_MMODE		// Switching back to M mode
