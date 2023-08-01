@@ -21,7 +21,7 @@ RVTEST_CODE_BEGIN
     RVTEST_CASE(1,"//check ISA:=regex(.*32.*); check ISA:=regex(.*I.*Zicsr.*); def rvtest_mtrap_routine=True; def rvtest_strap_routine=True; def TEST_CASE_1=True",sv32)
 
 RVTEST_SIGBASE( x13,signature_x13_1)
-  	
+
 main:
 #ifdef rvtest_mtrap_routine	// Verification of existance of rvtest_mtrap_routine
 	LI (a4, 0xceed)
@@ -40,9 +40,9 @@ main:
 	csrw satp, x0
 
 	// Set Value of MSTATUS
-	LI (a0, (MSTATUS_SUM))
+	LI (a0, 0)
 	csrs mstatus, a0
-	
+
 	.set va,		0x90000000
 	.set pa,		0x80000000 
 	.set va_data,	0x90011000
@@ -59,7 +59,7 @@ main:
 
 
 	// (PTE_D | PTE_A | PTE_G | PTE_U | PTE_X | PTE_W | PTE_R | PTE_V)
-	LI (a1, (PTE_D | PTE_A | PTE_G | PTE_X | PTE_W | PTE_R | PTE_V))
+	LI (a1, (PTE_D | PTE_A | PTE_G | PTE_U | PTE_X | PTE_W | PTE_R | PTE_V))
 	PTE_SETUP_RV32(a0, a1, t0, t1, va, 0)
 
 	LA (a0, rvtest_data)
@@ -114,10 +114,7 @@ main:
 	
 
 vm_en:
-	LA (t1, 0x90011000)
-	LI (t0, 0xdead1234)
-	SREG t0, 0(t1)
-	LREG t0, 0(t1)
+	nop
 
 	RVTEST_GOTO_MMODE		// Switching back to M mode
 	LI (a4, 0x123)
