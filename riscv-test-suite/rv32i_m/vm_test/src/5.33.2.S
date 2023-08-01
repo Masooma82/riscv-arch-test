@@ -105,6 +105,7 @@ main:
 	LREG t1, sig_bgn_off+0*sv_area_sz(sp)
 	add t2, t1, t0
 	SREG t2, sig_bgn_off+1*sv_area_sz(sp) 
+	SREG t2, sig_bgn_off+2*sv_area_sz(sp) 
 	
 
 	sfence.vma
