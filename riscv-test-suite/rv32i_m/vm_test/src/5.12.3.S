@@ -109,7 +109,16 @@ main:
 	
 
 vm_en:
-    nop
+	nop
+return:
+
+	RVTEST_GOTO_MMODE		// Switching back to M mode
+
+mmode:
+	LI (t2, 0xabab)			// Verification if handler is returning and SIGUPD is working afer the handler
+	csrw pmpaddr1, t2		// If in M-mode, this instruction will work otherwise not.
+	csrr a4, pmpaddr1
+	RVTEST_SIGUPD(x13,a4)
 #endif 
  # ---------------------------------------------------------------------------------------------
 RVTEST_CODE_END
